@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<properties>
+
+    <query key="course.create">
+        INSERT INTO courses
+        (title, description, price, createdAt, updatedAt, level, instructor_id, deleted)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?, 0)
+    </query>
+
+    <query key="course.findAll">
+        SELECT id, title
+        FROM courses
+        WHERE deleted = 0
+        ORDER BY id ASC
+    </query>
+
+    <query key="course.findDetail">
+        SELECT
+        c.id,
+        c.title,
+        c.description,
+        c.price,
+        c.createdAt,
+        c.updatedAt,
+        c.level,
+        c.instructor_id,
+        i.name AS instructor_name,
+        i.introduction AS instructor_introduction
+        FROM courses c
+        LEFT JOIN instructors i
+        ON c.instructor_id = i.id
+        AND i.deleted = 0
+        WHERE c.id = ?
+        AND c.deleted = 0
+    </query>
+
+    <query key="course.update">
+        UPDATE courses
+        SET title = ?,
+        price = ?,
+        level = ?,
+        description = ?,
+        instructor_id = ?,
+        updatedAt = CURRENT_TIMESTAMP
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="course.delete">
+        UPDATE courses
+        SET deleted = 1,
+        updatedAt = CURRENT_TIMESTAMP
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="content.create">
+        INSERT INTO contents
+        (title, content, createdAt, updatedAt, seq, course_id, content_type, deleted)
+        VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?, ?, 0)
+    </query>
+
+    <query key="content.findByCourseId">
+        SELECT id, title, content, createdAt, updatedAt, seq, course_id, content_type
+        FROM contents
+        WHERE course_id = ?
+        AND deleted = 0
+        ORDER BY seq ASC, id ASC
+    </query>
+
+    <query key="content.findById">
+        SELECT id, title, content, createdAt, updatedAt, seq, course_id, content_type
+        FROM contents
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="content.update">
+        UPDATE contents
+        SET title = ?,
+        content = ?,
+        content_type = ?,
+        updatedAt = CURRENT_TIMESTAMP
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="content.softDeleteById">
+        UPDATE contents
+        SET deleted = 1,
+        updatedAt = CURRENT_TIMESTAMP
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="content.softDeleteByCourseId">
+        UPDATE contents
+        SET deleted = 1,
+        updatedAt = CURRENT_TIMESTAMP
+        WHERE course_id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="instructor.create">
+        INSERT INTO instructors
+        (name, introduction, deleted)
+        VALUES (?, ?, 0)
+    </query>
+
+    <query key="instructor.findAll">
+        SELECT id, name, introduction
+        FROM instructors
+        WHERE deleted = 0
+        ORDER BY id ASC
+    </query>
+
+
+
+
+
+
+    <query key="instructor.findById">
+        SELECT id, name, introduction
+        FROM instructors
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="instructor.existsById">
+        SELECT COUNT(*)
+        FROM instructors
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="instructor.update">
+        UPDATE instructors
+        SET name = ?,
+        introduction = ?
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+    <query key="instructor.delete">
+        UPDATE instructors
+        SET deleted = 1
+        WHERE id = ?
+        AND deleted = 0
+    </query>
+
+</properties>
+
+
